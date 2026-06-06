@@ -8,7 +8,6 @@ import { Trash2, Plus, Minus, ArrowLeft, ShoppingBag } from "lucide-react";
 
 export default function CartPage() {
     const { cart, updateQty, removeFromCart, clearCart, total, count, isReady } = useCart();
-    console.log(cart, "aita paici")
 
     if (!isReady) {
         return (
@@ -150,11 +149,12 @@ export default function CartPage() {
                             </div>
 
                             <motion.button
+
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 className="w-full bg-[#00aaff] text-black font-semibold py-3 rounded-xl mb-3"
                             >
-                                Proceed to Checkout
+                                <Link href={"/checkout"}> Proceed to Checkout</Link>
                             </motion.button>
 
                             <Link href="/shop" className="block text-center text-sm text-white/60 hover:text-white">

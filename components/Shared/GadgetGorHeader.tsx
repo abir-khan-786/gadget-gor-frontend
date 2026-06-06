@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "./CartContext";
+import { Heart, User } from "lucide-react";
+import { useWishlist } from "./WishlistContext";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -17,7 +19,9 @@ const navItems = [
 export default function GadgetGorHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-  const { count } = useCart();
+  const { count: cartCount } = useCart();
+  const { count: wishlistCount } = useWishlist();
+
 
   return (
     <header className="w-full bg-[#0a0f1c] text-white sticky top-0 z-50">
@@ -67,18 +71,23 @@ export default function GadgetGorHeader() {
 
           {/* Right Icons */}
           <div className="flex items-center gap-3">
-            <Link href="/wishlist" className="relative p-2 hover:bg-white/10 rounded-full transition">
-              <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
-              </svg>
-              <span className="absolute -top-1 -right-1 bg-[#00aaff] text-black text- w-5 h-5 rounded-full grid place-items-center font-bold">2</span>
+            <Link href="/wishlist" className="relative">
+              <Heart size={20} />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 text-[10px] grid place-items-center rounded-full">
+                  {wishlistCount}
+                </span>
+              )}
             </Link>
 
             <Link href="/cart" className="relative p-2 hover:bg-white/10 rounded-full transition">
               <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M6 6h15l-1.5 9h-12z" /><circle cx="9" cy="20" r="1.5" /><circle cx="17" cy="20" r="1.5" />
               </svg>
-              <span className="absolute -top-1 -right-1 bg-[#00aaff] text-black text- w-5 h-5 rounded-full grid place-items-center font-bold">{count}</span>
+              <span className="absolute -top-1 -right-1 bg-[#00aaff] text-black text- w-5 h-5 rounded-full grid place-items-center font-bold">{cartCount}</span>
+            </Link>
+            <Link href="/login" className="relative p-2 hover:bg-white/10 rounded-full transition">
+              <User size={20} />
             </Link>
 
             {/* Mobile Toggle */}

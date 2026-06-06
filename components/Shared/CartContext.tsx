@@ -3,20 +3,18 @@
 import { CartItem, Product } from "@/types";
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
-
-
 type CartContextType = {
     cart: CartItem[];
     addToCart: (product: Product, qty?: number) => void;
-    removeFromCart: (id: number) => void;
-    updateQty: (id: number, qty: number) => void;
+    removeFromCart: (id: string | number) => void;
+    updateQty: (id: string | number, qty: number) => void;
     clearCart: () => void;
     total: number;
     count: number;
     isReady: boolean;
+    getTotal: () => number; // ✅ নতুন
+    getSubtotal: (id: string | number) => number; // ✅ bonus
 };
-
-
 
 const CartContext = createContext<CartContextType | null>(null);
 
@@ -45,13 +43,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }, [cart, isReady]);
 
     const addToCart = (product: Product, qty: number = 1) => {
-
         console.log(product, "aita add korci");
         setCart(prev => {
-            const exist = prev.find(p => p.id === product.id);
+            const exist = prev.find(p => String(p.id) === String(product.id));
             if (exist) {
                 return prev.map(p =>
-                    p.id === product.id ? { ...p, qty: p.qty + qty } : p
+                    String(p.id) === String(product.id)
+                        ? { ...p, qty: p.qty + qty }
+                        : p
                 );
             }
             return [...prev, { ...product, qty }];
@@ -59,19 +58,35 @@ export function CartProvider({ children }: { children: ReactNode }) {
     };
 
     const removeFromCart = (id: string | number) => {
-        setCart(prev => prev.filter(p => p.id !== id));
+        setCart(prev => prev.filter(p => String(p.id) !== String(id)));
     };
 
     const updateQty = (id: string | number, qty: number) => {
+        if (qty < 1) {
+            removeFromCart(id);
+            return;
+        }
         setCart(prev =>
-            prev.map(p => (p.id === id ? { ...p, qty: Math.max(1, qty) } : p))
+            prev.map(p => (String(p.id) === String(id) ? { ...p, qty } : p))
         );
     };
 
     const clearCart = () => setCart([]);
 
+    // ✅ Total calculate
     const total = cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0);
     const count = cart.reduce((sum, item) => sum + item.qty, 0);
+
+    // ✅ getTotal function
+    const getTotal = () => {
+        return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0);
+    };
+
+    // ✅ Bonus: single item subtotal
+    const getSubtotal = (id: string | number) => {
+        const item = cart.find(p => String(p.id) === String(id));
+        return item ? Number(item.price) * item.qty : 0;
+    };
 
     return (
         <CartContext.Provider
@@ -84,6 +99,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 total,
                 count,
                 isReady,
+                getTotal,
+                getSubtotal,
             }}
         >
             {children}
@@ -98,4 +115,3 @@ export const useCart = () => {
     }
     return context;
 };
-

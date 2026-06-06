@@ -4,9 +4,12 @@ import { useParams, useRouter } from "next/navigation";
 import { products } from "@/lib/products";
 import { useCart } from "@/components/Shared/CartContext";
 import { useState } from "react";
-import { ArrowLeft, Star, Minus, Plus, ShoppingCart, Heart, Share2, Truck, Shield, RotateCcw } from "lucide-react";
+import { ArrowLeft, Star, Minus, Plus, ShoppingCart, Heart, Share2, Truck, Shield, RotateCcw, } from "lucide-react";
+import { useWishlist } from "@/components/Shared/WishlistContext";
+
 
 export default function ProductPage() {
+    const { toggleWishlist, isInWishlist } = useWishlist();
     const param = useParams();
     const router = useRouter();
     const { addToCart } = useCart();
@@ -161,6 +164,18 @@ export default function ProductPage() {
                                 <ShoppingCart size={19} />
                                 Add to Cart — ৳{(price * qty).toLocaleString("en-BD")}
                             </button>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleWishlist(product);
+                                }}
+                                className="absolute top-3 right-3 w-8 h-8 grid place-items-center bg-black/60 backdrop-blur rounded-full hover:bg-black/80 transition"
+                            >
+                                <Heart
+                                    size={16}
+                                    className={isInWishlist(product.id) ? "fill-red-500 text-red-500" : "text-white"}
+                                />
+                            </button>
                         </div>
 
                         {/* Buy Now */}
@@ -183,6 +198,7 @@ export default function ProductPage() {
                             ))}
                         </div>
                     </div>
+
                 </div>
 
                 {/* Bottom info */}

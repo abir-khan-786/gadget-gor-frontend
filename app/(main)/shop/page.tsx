@@ -4,13 +4,15 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import { products } from "@/lib/products";
 import { useCart } from "@/components/Shared/CartContext";
-import { SlidersHorizontal, Star } from "lucide-react";
+import { SlidersHorizontal, Star, Heart } from "lucide-react";
+import { useWishlist } from "@/components/Shared/WishlistContext";
 
 export default function ShopPage() {
     const [showFilters, setShowFilters] = useState(false);
     const [selectedCat, setSelectedCat] = useState("All");
     const [sortBy, setSortBy] = useState("popular");
     const { addToCart } = useCart();
+    const { toggleWishlist, isInWishlist } = useWishlist();
 
     const categories = [
         "All",
@@ -229,6 +231,18 @@ export default function ShopPage() {
                                                 className="w-full mt-3.5 py-2.5 bg-white/5 hover:bg-[#00aaff] text-white hover:text-black border border-white/10 hover:border-[#00aaff] rounded-xl text-sm font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
                                             >
                                                 {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
+                                            </button>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    toggleWishlist(product);
+                                                }}
+                                                className="absolute top-3 right-3 w-8 h-8 grid place-items-center bg-black/60 backdrop-blur rounded-full hover:bg-black/80 transition"
+                                            >
+                                                <Heart
+                                                    size={16}
+                                                    className={isInWishlist(product.id) ? "fill-red-500 text-red-500" : "text-white"}
+                                                />
                                             </button>
                                         </div>
                                     </div>

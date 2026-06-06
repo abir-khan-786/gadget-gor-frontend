@@ -15,3 +15,4 @@ export interface Product {
 
 export type CartItem = Product & { qty: number };
 
+export type WishlistItem = Product;
