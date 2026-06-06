@@ -2,7 +2,7 @@ import { Product } from "@/types";
 
 export const products: Product[] = [
   {
-    id: "1",
+    id: 1,
     name: "Nova X1 Smart Watch",
     price: 3490,
     oldPrice: 4200,
@@ -15,7 +15,7 @@ export const products: Product[] = [
     stock: 18
   },
   {
-    id: "2",
+    id: 2,
     name: "AirBass Pro Earbuds",
     price: 2190,
     oldPrice: 2790,
@@ -28,7 +28,7 @@ export const products: Product[] = [
     stock: 32
   },
   {
-    id: "3",
+    id: 3,
     name: "PowerGo 20000mAh Power Bank",
     price: 1890,
     oldPrice: 2400,
@@ -41,7 +41,7 @@ export const products: Product[] = [
     stock: 25
   },
   {
-    id: "4",
+    id: 4,
     name: "GorPad Mini Tablet",
     price: 14500,
     oldPrice: 16900,
@@ -52,7 +52,215 @@ export const products: Product[] = [
     description: "Lightweight tablet for study, entertainment and online business management.",
     features: ["8 inch display", "4GB RAM", "64GB storage", "WiFi + SIM"],
     stock: 10
+  },
+  {
+    id: 55,
+    name: "iPhone 15 Pro Max 256GB",
+    price: 164999,
+    oldPrice: 179999,
+    category: "Smartphone",
+    rating: 4.9,
+    reviews: 124,
+    image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800",
+    description: "Titanium design, A17 Pro chip, 48MP camera. 1 year official warranty.",
+    features: ["A17 Pro chip", "48MP camera", "Titanium frame", "USB-C"],
+    stock: 12
+  },
+  {
+    id: 6,
+    name: "Samsung Galaxy S24 Ultra",
+    price: 139999,
+    oldPrice: 149999,
+    category: "Smartphone",
+    rating: 4.8,
+    reviews: 89,
+    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800",
+    description: "Galaxy AI, 200MP camera, Titanium frame.",
+    features: ["200MP camera", "S Pen", "Galaxy AI", "5000mAh"],
+    stock: 8
+  },
+  {
+    id: 7,
+    name: "AirPods Pro 2nd Gen",
+    price: 24990,
+    oldPrice: 32990,
+    category: "Audio",
+    rating: 4.9,
+    reviews: 256,
+    image: "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=800",
+    description: "Active Noise Cancellation, Adaptive Transparency.",
+    features: ["H2 chip", "ANC", "6h + 30h battery", "MagSafe"],
+    stock: 25
+  },
+  {
+    id: 8,
+    name: "Xiaomi Redmi Buds 5 Pro",
+    price: 5990,
+    oldPrice: 7990,
+    category: "Audio",
+    rating: 4.6,
+    reviews: 78,
+    image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800",
+    description: "Hi-Res audio, 38h battery.",
+    features: ["Hi-Res audio", "ANC", "38h battery", "Dual device"],
+    stock: 30
+  },
+  {
+    id: 9,
+    name: "Apple Watch Series 9",
+    price: 45990,
+    oldPrice: 52990,
+    category: "Smart Watch",
+    rating: 4.8,
+    reviews: 112,
+    image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=800",
+    description: "S9 chip, Double Tap gesture.",
+    features: ["S9 chip", "Double Tap", "45mm Retina", "18h battery"],
+    stock: 15
+  },
+  {
+    id: 10,
+    name: "Sony WH-1000XM5",
+    price: 32990,
+    oldPrice: 38990,
+    category: "Headphone",
+    rating: 4.9,
+    reviews: 187,
+    image: "https://images.unsplash.com/photo-1545127398-14699f92334b?w=800",
+    description: "Industry leading noise canceling",
+    features: ["ANC", "30h battery", "30mm driver", "Multipoint"],
+    stock: 9
+  },
+  {
+    id: 11,
+    name: "OnePlus Buds 3",
+    price: 8990,
+    oldPrice: 11990,
+    category: "Audio",
+    rating: 4.5,
+    reviews: 64,
+    image: "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=800",
+    description: "49dB ANC, 44h battery",
+    features: ["49dB ANC", "44h battery", "LHDC", "IP55"],
+    stock: 18
+  },
+  {
+    id: 12,
+    name: "Anker PowerCore 20000",
+    price: 3490,
+    oldPrice: 4490,
+    category: "Accessories",
+    rating: 4.7,
+    reviews: 203,
+    image: "https://images.unsplash.com/photo-1609094335404-72b6a8e3f8de?w=800",
+    description: "20000mAh, PowerIQ 3.0",
+    features: ["20000mAh", "20W PD", "PowerIQ 3", "Compact"],
+    stock: 40
+  },
+  {
+    id: 13,
+    name: "Logitech MX Master 3S",
+    price: 8990,
+    oldPrice: 10990,
+    category: "Accessories",
+    rating: 4.9,
+    reviews: 142,
+    image: "https://images.unsplash.com/photo-1527814050087-3793815479db?w=800",
+    description: "Wireless mouse for creators and coders",
+    features: ["8K DPI", "Quiet clicks", "USB-C", "70 days battery"],
+    stock: 22
+  },
+  {
+    id: 14,
+    name: "Samsung 49\" Odyssey G9",
+    price: 125000,
+    oldPrice: 145000,
+    category: "Monitor",
+    rating: 4.8,
+    reviews: 34,
+    image: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=800",
+    description: "49-inch curved gaming monitor 240Hz",
+    features: ["DQHD", "240Hz", "1ms", "QLED"],
+    stock: 5
+  },
+  {
+    id: 15,
+    name: "Razer BlackWidow V4",
+    price: 12990,
+    oldPrice: 15990,
+    category: "Accessories",
+    rating: 4.7,
+    reviews: 76,
+    image: "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=800",
+    description: "Mechanical gaming keyboard",
+    features: ["Green switches", "RGB", "Aluminum frame", "USB passthrough"],
+    stock: 14
+  },
+  {
+    id: 5655,
+    name: "DJI Mini 3 Pro Drone",
+    price: 89900,
+    oldPrice: 99900,
+    category: "Drone",
+    rating: 4.9,
+    reviews: 58,
+    image: "https://images.unsplash.com/photo-1507582020474-9a35b7d455d9?w=800",
+    description: "4K drone under 249g",
+    features: ["4K60 video", "34min flight", "Tri-directional", "249g"],
+    stock: 7
+  },
+  {
+    id: 17,
+    name: "GoPro Hero 12 Black",
+    price: 42990,
+    oldPrice: 48990,
+    category: "Camera",
+    rating: 4.8,
+    reviews: 92,
+    image: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=800",
+    description: "Action camera 5.3K60",
+    features: ["5.3K60", "HyperSmooth 6", "Waterproof 10m", "HDR"],
+    stock: 11
+  },
+  {
+    id: 898,
+    name: "Kindle Paperwhite 11th",
+    price: 14990,
+    oldPrice: 17990,
+    category: "Tablet",
+    rating: 4.7,
+    reviews: 103,
+    image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=800",
+    description: "6.8\" e-ink display, waterproof",
+    features: ["6.8 inch", "Warm light", "IPX8", "10 weeks battery"],
+    stock: 20
+  },
+  {
+    id: 9565,
+    name: "JBL Flip 6 Speaker",
+    price: 9990,
+    oldPrice: 12990,
+    category: "Audio",
+    rating: 4.6,
+    reviews: 156,
+    image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=800",
+    description: "Portable Bluetooth speaker",
+    features: ["IP67", "12h play", "PartyBoost", "USB-C"],
+    stock: 28
+  },
+  {
+    id: 668,
+    name: "MacBook Air M3 13\"",
+    price: 134900,
+    oldPrice: 149900,
+    category: "Laptop",
+    rating: 4.9,
+    reviews: 67,
+    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800",
+    description: "M3 chip, 8GB RAM, 256GB SSD",
+    features: ["M3 chip", "18h battery", "13.6 Liquid Retina", "Fanless"],
+    stock: 6
   }
 ];
 
-export const getProduct = (id: string) => products.find((product) => product.id === id);
+export const getProduct = (id: number) => products.find((product) => product.id === id);

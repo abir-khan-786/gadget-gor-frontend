@@ -1,8 +1,8 @@
-export type Product = {
-  id: string;
+export interface Product {
+  id: number;
   name: string;
   price: number;
-  oldPrice?: number;
+  oldPrice: number;
   category: string;
   rating: number;
   reviews: number;
@@ -10,4 +10,8 @@ export type Product = {
   description: string;
   features: string[];
   stock: number;
-};
+}
+
+
+export type CartItem = Product & { qty: number };
+

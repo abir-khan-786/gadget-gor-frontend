@@ -3,6 +3,7 @@ import "./globals.css";
 import Footer from "@/components/Shared/Footer";
 import ToastProvider from "@/components/ToastProvider";
 import GadgetGorHeader from "@/components/Shared/GadgetGorHeader";
+import { CartProvider } from "@/components/Shared/CartContext";
 
 export const metadata: Metadata = {
   title: "Gadget Gor - Online Gadget Shop",
@@ -13,10 +14,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <ToastProvider />
-        <GadgetGorHeader />
-        {children}
-        <Footer />
+        <CartProvider>
+          <ToastProvider />
+          <GadgetGorHeader />
+          {children}
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );

@@ -1,96 +1,198 @@
 "use client";
 
+import { useParams, useRouter } from "next/navigation";
+import { products } from "@/lib/products";
+import { useCart } from "@/components/Shared/CartContext";
 import { useState } from "react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-
-const allProducts = [
-    { id: "1", name: "iPhone 15 Pro Max 256GB", price: 164999, old: 179999, images: ["https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800", "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800"], brand: "Apple", rating: 4.9, reviews: 124, stock: 12, desc: "Titanium design, A17 Pro chip, 48MP camera. 1 year official warranty.", specs: { Display: "6.7\" Super Retina XDR", Chip: "A17 Pro", Storage: "256GB", Camera: "48MP" } },
-    { id: "2", name: "Samsung Galaxy S24 Ultra", price: 139999, old: 149999, images: ["https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800"], brand: "Samsung", rating: 4.8, reviews: 89, stock: 8, desc: "Galaxy AI, 200MP camera, Titanium frame.", specs: { Display: "6.8\" AMOLED", Chip: "Snapdragon 8 Gen 3", RAM: "12GB" } },
-    { id: "3", name: "AirPods Pro 2nd Gen", price: 24990, old: 32990, images: ["https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=800"], brand: "Apple", rating: 4.9, reviews: 256, stock: 25, desc: "Active Noise Cancellation, Adaptive Transparency.", specs: { Chip: "H2", Battery: "6h + 30h" } },
-    { id: "4", name: "Xiaomi Redmi Buds 5 Pro", price: 5990, old: 7990, images: ["https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800"], brand: "Xiaomi", rating: 4.6, reviews: 78, stock: 30, desc: "Hi-Res audio, 38h battery.", specs: { Driver: "10mm", ANC: "Yes" } },
-    { id: "5", name: "Apple Watch Series 9", price: 45990, old: 52990, images: ["https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=800"], brand: "Apple", rating: 4.8, reviews: 112, stock: 15, desc: "S9 chip, Double Tap gesture.", specs: { Display: "45mm Retina", Battery: "18h" } },
-    { id: "6", name: "Anker PowerCore 20000", price: 3490, old: 4490, images: ["https://images.unsplash.com/photo-1609094335404-72b6a8e3f8de?w=800"], brand: "Anker", rating: 4.7, reviews: 203, stock: 40, desc: "20000mAh, PowerIQ 3.0", specs: { Capacity: "20000mAh", Output: "20W" } },
-    { id: "7", name: "OnePlus Buds 3", price: 8990, old: 11990, images: ["https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=800"], brand: "OnePlus", rating: 4.5, reviews: 64, stock: 18, desc: "49dB ANC, 44h battery", specs: { ANC: "49dB", Battery: "44h" } },
-    { id: "8", name: "Sony WH-1000XM5", price: 32990, old: 38990, images: ["https://images.unsplash.com/photo-1545127398-14699f92334b?w=800"], brand: "Sony", rating: 4.9, reviews: 187, stock: 9, desc: "Industry leading noise canceling", specs: { Driver: "30mm", Battery: "30h" } },
-];
+import { ArrowLeft, Star, Minus, Plus, ShoppingCart, Heart, Share2, Truck, Shield, RotateCcw } from "lucide-react";
 
 export default function ProductPage() {
-    const params = useParams();
-    const product = allProducts.find(p => p.id === params.id) || allProducts[0];
-
-    const [selectedImg, setSelectedImg] = useState(0);
+    const param = useParams();
+    const router = useRouter();
+    const { addToCart } = useCart();
     const [qty, setQty] = useState(1);
+    const [liked, setLiked] = useState(false);
+
+    // ✅ id safe
+    const id = Array.isArray(param.id) ? param.id[0] : param.id;
+    const product = products.find(p => String(p.id) === String(id));
+
+    console.log("Param:", param, "Found:", product);
 
     if (!product) {
-        return <div className="min-h-screen bg-[#0a0f1c] grid place-items-center text-white">Product not found</div>;
+        return (
+            <div className="min-h-screen bg-[#0a0f1c] text-white flex items-center justify-center">
+                <div className="text-center">
+                    <div className="text-6xl mb-4">🔍</div>
+                    <h1 className="text-2xl font-bold mb-2">Product Not Found</h1>
+                    <p className="text-white/60 mb-6">ID: {String(id)}</p>
+                    <button onClick={() => router.push("/shop")} className="px-6 py-3 bg-[#00aaff] text-black rounded-xl font-medium">
+                        Browse Products
+                    </button>
+                </div>
+            </div>
+        );
     }
 
-    const discount = Math.round(((product.old - product.price) / product.old) * 100);
+    const price = Number(product.price) || 0;
+    const oldPrice = Number(product.oldPrice) || price;
+    const discount = oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0;
 
     return (
         <div className="min-h-screen bg-[#0a0f1c] text-white">
-            <div className="max-w-7xl mx-auto px-4 py-6">
-                {/* Breadcrumb */}
-                <div className="flex items-center gap-2 text-sm text-white/60 mb-6">
-                    <Link href="/" className="hover:text-white">Home</Link>
-                    <span>/</span>
-                    <Link href="/shop" className="hover:text-white">Shop</Link>
-                    <span>/</span>
-                    <span className="text-white truncate">{product.name}</span>
-                </div>
-
-                <div className="grid lg:grid-cols-2 gap-8">
-                    {/* Images */}
-                    <div>
-                        <div className="aspect-square bg-[#111827] rounded-3xl overflow-hidden border border-white/10 mb-4">
-                            <img src={product.images[selectedImg]} alt={product.name} className="w-full h-full object-contain p-8" />
-                        </div>
-                        <div className="flex gap-3 overflow-x-auto">
-                            {product.images.map((img, i) => (
-                                <button key={i} onClick={() => setSelectedImg(i)} className={`w-20 h-20 flex-shrink-0 rounded-2xl overflow-hidden border-2 ${selectedImg === i ? 'border-[#00aaff]' : 'border-white/10'}`}>
-                                    <img src={img} className="w-full h-full object-cover" />
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Details */}
-                    <div>
-                        <span className="inline-block px-3 py-1 bg-white/10 rounded-full text-xs mb-3">{product.brand}</span>
-                        <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
-
-                        <div className="flex items-baseline gap-3 mb-4">
-                            <span className="text-4xl font-bold">৳{product.price.toLocaleString('en-BD')}</span>
-                            <span className="text-xl line-through text-white/40">৳{product.old.toLocaleString('en-BD')}</span>
-                            <span className="px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded-full">-{discount}%</span>
-                        </div>
-
-                        <p className="text-white/70 mb-6">{product.desc}</p>
-
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="flex bg-white/5 border border-white/20 rounded-xl">
-                                <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-11 h-11">−</button>
-                                <span className="w-12 grid place-items-center">{qty}</span>
-                                <button onClick={() => setQty(qty + 1)} className="w-11 h-11">+</button>
-                            </div>
-                            <span className="text-sm text-white/60">{product.stock} in stock</span>
-                        </div>
-
-                        <button className="w-full py-4 bg-[#00aaff] rounded-2xl font-semibold mb-8 hover:bg-[#0094e0] transition">
-                            Add to Cart — ৳{(product.price * qty).toLocaleString('en-BD')}
+            {/* Header */}
+            <div className="sticky top-0 z-30 bg-[#0a0f1c]/80 backdrop-blur-xl border-b border-white/10">
+                <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+                    <button onClick={() => router.back()} className="flex items-center gap-2 text-white/70 hover:text-white">
+                        <ArrowLeft size={20} />
+                        <span className="hidden sm:inline">Back</span>
+                    </button>
+                    <div className="flex items-center gap-3">
+                        <button onClick={() => setLiked(!liked)} className={`w-9 h-9 grid place-items-center rounded-full border transition ${liked ? "bg-red-500/20 border-red-500/50 text-red-400" : "bg-white/5 border-white/10 text-white/70 hover:text-white"}`}>
+                            <Heart size={18} fill={liked ? "currentColor" : "none"} />
                         </button>
+                        <button className="w-9 h-9 grid place-items-center rounded-full bg-white/5 border border-white/10 text-white/70 hover:text-white">
+                            <Share2 size={18} />
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-                        <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
-                            <h3 className="font-semibold mb-3">Specifications</h3>
-                            {Object.entries(product.specs).map(([k, v]) => (
-                                <div key={k} className="flex justify-between py-2 text-sm border-b border-white/5 last:border-0">
-                                    <span className="text-white/60">{k}</span>
-                                    <span>{v}</span>
+            <div className="max-w-7xl mx-auto px-4 py-6 lg:py-10">
+                <div className="grid lg:grid-cols-[1.1fr_1fr] gap-8 lg:gap-12">
+                    {/* LEFT - Image */}
+                    <div>
+                        <div className="relative aspect-square bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 rounded- overflow-hidden">
+                            <img src={product.image} alt={product.name} className="w-full h-full object-contain p-8 lg:p-12" />
+
+                            {discount > 0 && (
+                                <div className="absolute top-5 left-5">
+                                    <div className="px-3 py-1.5 bg-red-500 text-white text-xs font-bold rounded-full shadow-lg shadow-red-500/20">
+                                        -{discount}% OFF
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Thumbnails - fake for design */}
+                        <div className="flex gap-3 mt-4 overflow-x-auto">
+                            {[1, 2, 3, 4].map(i => (
+                                <div key={i} className={`w-20 h-20 rounded-2xl border-2 shrink-0 overflow-hidden cursor-pointer ${i === 1 ? "border-[#00aaff]" : "border-white/10 hover:border-white/30"}`}>
+                                    <img src={product.image} className="w-full h-full object-cover opacity-70" />
                                 </div>
                             ))}
                         </div>
                     </div>
+
+                    {/* RIGHT - Details */}
+                    <div className="lg:py-4">
+                        {/* Category */}
+                        <div className="flex items-center gap-2 mb-3">
+                            <span className="text-[#00aaff] text-sm font-medium">{product.category}</span>
+                            <span className="text-white/20">•</span>
+                            <span className={`text-xs ${product.stock > 0 ? "text-emerald-400" : "text-red-400"}`}>
+                                {product.stock > 0 ? `In Stock (${product.stock})` : "Out of Stock"}
+                            </span>
+                        </div>
+
+                        {/* Title */}
+                        <h1 className="text- lg:text- font-bold leading-tight tracking-tight mb-3">
+                            {product.name}
+                        </h1>
+
+                        {/* Rating */}
+                        <div className="flex items-center gap-3 mb-5">
+                            <div className="flex items-center gap-1">
+                                {[...Array(5)].map((_, i) => (
+                                    <Star key={i} size={15} className={i < Math.floor(product.rating) ? "fill-amber-400 text-amber-400" : "text-white/20"} />
+                                ))}
+                            </div>
+                            <span className="text-sm">
+                                <b className="text-white">{product.rating}</b>
+                                <span className="text-white/50"> · {product.reviews} reviews</span>
+                            </span>
+                        </div>
+
+                        {/* Price */}
+                        <div className="mb-6">
+                            <div className="flex items-baseline gap-3">
+                                <div className="text- font-bold">৳{price.toLocaleString("en-BD")}</div>
+                                {oldPrice > price && (
+                                    <div className="text-lg text-white/40 line-through">৳{oldPrice.toLocaleString("en-BD")}</div>
+                                )}
+                            </div>
+                            {discount > 0 && (
+                                <p className="text-sm text-emerald-400 mt-1">You save ৳{(oldPrice - price).toLocaleString("en-BD")} ({discount}%)</p>
+                            )}
+                        </div>
+
+                        {/* Description */}
+                        <p className="text- leading-relaxed text-white/70 mb-6">
+                            {product.description}
+                        </p>
+
+                        {/* Features */}
+                        <div className="grid grid-cols-2 gap-2.5 mb-8">
+                            {product.features?.slice(0, 4).map((f, i) => (
+                                <div key={i} className="flex items-center gap-2.5 px-3.5 py-2.5 bg-white/[0.03] border border-white/10 rounded-xl">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-[#00aaff]" />
+                                    <span className="text- text-white/80">{f}</span>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Qty + Add */}
+                        <div className="flex gap-3 mb-6">
+                            <div className="flex items-center bg-white/[0.04] border border-white/15 rounded-2xl">
+                                <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-11 h-12 grid place-items-center hover:text-[#00aaff] transition">
+                                    <Minus size={18} />
+                                </button>
+                                <div className="w-12 text-center font-semibold">{qty}</div>
+                                <button onClick={() => setQty(Math.min(product.stock, qty + 1))} className="w-11 h-12 grid place-items-center hover:text-[#00aaff] transition">
+                                    <Plus size={18} />
+                                </button>
+                            </div>
+
+                            <button
+                                onClick={() => addToCart(product, qty)}
+                                disabled={product.stock === 0}
+                                className="flex-1 h-12 bg-[#00aaff] hover:bg-[#00aaff]/90 text-black font-semibold rounded-2xl flex items-center justify-center gap-2 transition disabled:opacity-40"
+                            >
+                                <ShoppingCart size={19} />
+                                Add to Cart — ৳{(price * qty).toLocaleString("en-BD")}
+                            </button>
+                        </div>
+
+                        {/* Buy Now */}
+                        <button className="w-full h-12 bg-white/5 hover:bg-white/10 border border-white/15 rounded-2xl font-medium transition mb-8">
+                            Buy Now
+                        </button>
+
+                        {/* Trust badges */}
+                        <div className="grid grid-cols-3 gap-3 pt-6 border-t border-white/10">
+                            {[
+                                { icon: Truck, label: "Free Delivery", sub: "Dhaka city" },
+                                { icon: Shield, label: "Warranty", sub: "Official" },
+                                { icon: RotateCcw, label: "7-Day Return", sub: "Easy return" },
+                            ].map((item) => (
+                                <div key={item.label} className="text-center">
+                                    <item.icon size={20} className="mx-auto mb-1.5 text-white/60" />
+                                    <div className="text-xs font-medium text-white/90">{item.label}</div>
+                                    <div className="text- text-white/50">{item.sub}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom info */}
+                <div className="mt-16 grid md:grid-cols-3 gap-4">
+                    {["Specifications", "What's in the box", "Reviews"].map(tab => (
+                        <div key={tab} className="p-5 bg-white/[0.02] border border-white/10 rounded-2xl hover:bg-white/[0.04] cursor-pointer transition">
+                            <h3 className="font-medium mb-1">{tab}</h3>
+                            <p className="text-sm text-white/50">View details →</p>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
